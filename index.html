@@ -765,7 +765,7 @@
     <div class="info-card">
       <span class="info-card-icon">🍾</span>
       <div class="info-card-label">Incluye</div>
-      <div class="info-card-value">Karting · Cena<br>Barra Libre</div>
+      <div class="info-card-value">· Cena <br>· Barra Libre </div>
       <div class="info-card-sub">¡Una noche para no frenar!</div>
     </div>
   </div>
@@ -775,7 +775,7 @@
     <span style="font-size:32px">🏎️</span>
     <div>
       <strong>Dress Code</strong>
-      <p>Estilo Racing · Elegante Sport · ¡Atrévete!</p>
+      <p>· Elegante Sport ·</p>
     </div>
   </div>
 </section>
@@ -804,6 +804,15 @@
         <img src="https://images.unsplash.com/photo-1547483238-f400e65ccd56?w=400&q=80" alt="Foto 5" onerror="this.parentNode.classList.add('ph')">
       </div>
     </div>
+    <div class="location-info fade-in">
+    <div class="location-detail">
+      <h4>Cargá y busca tus fotos</h4>
+      <p>Subí y encontra tus fotos de esta noche inolvidable</p>
+      <a href="https://drive.google.com/drive/folders/1mKplArvcAnsW3xHgaA1M9yJ9WeIURuJT?usp=sharing" target="_blank">
+        ↗ Abrir Galeria de Fotos
+      </a>
+    </div>
+  </div>
   </div>
 </div>
 
@@ -849,27 +858,22 @@
           <label>Tu Nombre</label>
           <input type="text" id="nombre" placeholder="Juan García" autocomplete="name">
         </div>
-        <div>
-          <label>Whatsapp</label>
-          <input type="tel" id="telefono" placeholder="+54 9 11 ···" autocomplete="tel">
-        </div>
       </div>
       <div>
         <label>¿Venís?</label>
         <select id="asistencia">
           <option value="">— Seleccioná —</option>
-          <option value="si">🟢 ¡Sí, arranco a todo!</option>
-          <option value="tal-vez">🟡 Todavía no sé</option>
+          <option value="si">🟢 ¡Sí, no me la pienso perder!</option>
           <option value="no">🔴 No puedo esta vez</option>
         </select>
       </div>
       <div>
-        <label>Acompañantes (opcional)</label>
+        <label>Menu Especial</label>
         <select id="acompanantes">
-          <option value="0">Voy solo/a</option>
-          <option value="1">+1 persona</option>
-          <option value="2">+2 personas</option>
-          <option value="3">+3 personas</option>
+          <option value="0">Ninguno</option>
+          <option value="1">Vegetariano/a</option>
+          <option value="2">Vegano/a</option>
+          <option value="3">Sin TACC</option>
         </select>
       </div>
       <button class="btn-rsvp" onclick="enviarRSVP()">
