@@ -945,6 +945,45 @@
     });
   }, { threshold: 0.15 });
   document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+
+  /* Link con excel */
+  async function enviarRSVP() {
+  const nombre     = document.getElementById('nombre').value.trim();
+  const asistencia = document.getElementById('asistencia').value;
+  const menu       = document.getElementById('menu').value;
+
+  if (!nombre)     { alert('Por favor ingresá tu nombre 😊'); return; }
+  if (!asistencia) { alert('¿Venís o no? ¡Seleccioná una opción!'); return; }
+
+  const btn = document.getElementById('btn-confirmar');
+  btn.textContent = '⏳ ENVIANDO...';
+  btn.disabled = true;
+
+  // ← Pegá acá tu URL de Apps Script
+  const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyLZAJYnHN84KHkoXJUSF13esL7Ka4J7pR1QlTNNOBmDf1nesOraDjpvwuffduKv1898g/exec';
+
+  try {
+    await fetch(SHEET_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nombre, asistencia, menu })
+    });
+  } catch(err) {
+    console.error('Error al guardar:', err);
+  }
+
+  document.getElementById('rsvp-form').style.display = 'none';
+  const thanks = document.getElementById('rsvp-thanks');
+  thanks.style.display = 'flex';
+
+  if (asistencia === 'no') {
+    thanks.querySelector('h3').textContent = '¡Te vamos a extrañar!';
+    thanks.querySelector('p').textContent  = 'Gracias por avisarnos. ¡Esperamos verte en la próxima vuelta!';
+    thanks.querySelector('.check').textContent = '✕';
+  }
+}
 </script>
 </body>
 </html>
