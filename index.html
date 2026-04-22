@@ -960,20 +960,25 @@
   btn.textContent = '⏳ ENVIANDO...';
   btn.disabled = true;
 
-  // ← Pegá acá tu URL de Apps Script
   const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyLZAJYnHN84KHkoXJUSF13esL7Ka4J7pR1QlTNNOBmDf1nesOraDjpvwuffduKv1898g/exec';
+
+  // Usamos FormData en lugar de JSON (compatible con no-cors)
+  const formData = new FormData();
+  formData.append('nombre', nombre);
+  formData.append('asistencia', asistencia);
+  formData.append('menu', menu);
 
   try {
     await fetch(SHEET_URL, {
       method: 'POST',
       mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ nombre, asistencia, menu })
+      body: formData
     });
   } catch(err) {
-    console.error('Error al guardar:', err);
+    console.error('Error:', err);
   }
 
+  // Mostrar animación de confirmación
   document.getElementById('rsvp-form').style.display = 'none';
   const thanks = document.getElementById('rsvp-thanks');
   thanks.style.display = 'flex';
