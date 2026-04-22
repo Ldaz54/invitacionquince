@@ -853,11 +853,9 @@
     <h2 class="section-heading">¿Vas a<br>Arrancar?</h2>
 
     <div class="rsvp-form" id="rsvp-form">
-      <div class="rsvp-grid">
-        <div>
-          <label>Tu Nombre</label>
-          <input type="text" id="nombre" placeholder="Juan García" autocomplete="name">
-        </div>
+      <div>
+        <label>Tu Nombre</label>
+        <input type="text" id="nombre" placeholder="Juan García" autocomplete="name">
       </div>
       <div>
         <label>¿Venís?</label>
@@ -868,15 +866,15 @@
         </select>
       </div>
       <div>
-        <label>Menu Especial</label>
-        <select id="acompanantes">
-          <option value="0">Ninguno</option>
-          <option value="1">Vegetariano/a</option>
-          <option value="2">Vegano/a</option>
-          <option value="3">Sin TACC</option>
+        <label>Menú Especial</label>
+        <select id="menu">
+          <option value="Ninguno">Ninguno</option>
+          <option value="Vegetariano">Vegetariano/a</option>
+          <option value="Vegano">Vegano/a</option>
+          <option value="Sin TACC">Sin TACC</option>
         </select>
       </div>
-      <button class="btn-rsvp" onclick="enviarRSVP()">
+      <button class="btn-rsvp" id="btn-confirmar" onclick="enviarRSVP()">
         ▶ CONFIRMAR ASISTENCIA ◀
       </button>
     </div>
@@ -889,10 +887,8 @@
   </div>
 </div>
 
-<!-- CHECKER -->
 <div class="checker-bar"></div>
 
-<!-- FOOTER -->
 <footer>
   &copy; 2026 · Gran Prix Rosario · 15 Años · Con Amor ♥
 </footer>
@@ -901,7 +897,6 @@
   /* ── COUNTDOWN ── */
   function pad(n){ return String(n).padStart(2,'0'); }
   function updateCountdown(){
-    /* ← Cambiá esta fecha por la del evento real */
     const target = new Date('2026-06-20T21:00:00').getTime();
     const now = Date.now();
     const diff = target - now;
@@ -910,28 +905,49 @@
         .forEach(id => document.getElementById(id).textContent = '00');
       return;
     }
-    const days    = Math.floor(diff / 86400000);
-    const hours   = Math.floor((diff % 86400000) / 3600000);
-    const minutes = Math.floor((diff % 3600000) / 60000);
-    const seconds = Math.floor((diff % 60000) / 1000);
-    document.getElementById('cd-days').textContent    = pad(days);
-    document.getElementById('cd-hours').textContent   = pad(hours);
-    document.getElementById('cd-minutes').textContent = pad(minutes);
-    document.getElementById('cd-seconds').textContent = pad(seconds);
+    document.getElementById('cd-days').textContent    = pad(Math.floor(diff / 86400000));
+    document.getElementById('cd-hours').textContent   = pad(Math.floor((diff % 86400000) / 3600000));
+    document.getElementById('cd-minutes').textContent = pad(Math.floor((diff % 3600000) / 60000));
+    document.getElementById('cd-seconds').textContent = pad(Math.floor((diff % 60000) / 1000));
   }
   updateCountdown();
   setInterval(updateCountdown, 1000);
 
   /* ── RSVP ── */
-  function enviarRSVP(){
+  async function enviarRSVP() {
     const nombre     = document.getElementById('nombre').value.trim();
     const asistencia = document.getElementById('asistencia').value;
-    if(!nombre){ alert('Por favor ingresá tu nombre 😊'); return; }
-    if(!asistencia){ alert('¿Venís o no? ¡Seleccioná una opción!'); return; }
+    const menu       = document.getElementById('menu').value;
+
+    if (!nombre)     { alert('Por favor ingresá tu nombre 😊'); return; }
+    if (!asistencia) { alert('¿Venís o no? ¡Seleccioná una opción!'); return; }
+
+    const btn = document.getElementById('btn-confirmar');
+    btn.textContent = '⏳ ENVIANDO...';
+    btn.disabled = true;
+
+    const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyLZAJYnHN84KHkoXJUSF13esL7Ka4J7pR1QlTNNOBmDf1nesOraDjpvwuffduKv1898g/exec';
+
+    const formData = new FormData();
+    formData.append('nombre', nombre);
+    formData.append('asistencia', asistencia);
+    formData.append('menu', menu);
+
+    try {
+      await fetch(SHEET_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: formData
+      });
+    } catch(err) {
+      console.error('Error:', err);
+    }
+
     document.getElementById('rsvp-form').style.display = 'none';
     const thanks = document.getElementById('rsvp-thanks');
     thanks.style.display = 'flex';
-    if(asistencia === 'no'){
+
+    if (asistencia === 'no') {
       thanks.querySelector('h3').textContent = '¡Te vamos a extrañar!';
       thanks.querySelector('p').textContent  = 'Gracias por avisarnos. ¡Esperamos verte en la próxima vuelta!';
       thanks.querySelector('.check').textContent = '✕';
@@ -945,50 +961,6 @@
     });
   }, { threshold: 0.15 });
   document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-
-
-  /* Link con excel */
-  async function enviarRSVP() {
-  const nombre     = document.getElementById('nombre').value.trim();
-  const asistencia = document.getElementById('asistencia').value;
-  const menu       = document.getElementById('menu').value;
-
-  if (!nombre)     { alert('Por favor ingresá tu nombre 😊'); return; }
-  if (!asistencia) { alert('¿Venís o no? ¡Seleccioná una opción!'); return; }
-
-  const btn = document.getElementById('btn-confirmar');
-  btn.textContent = '⏳ ENVIANDO...';
-  btn.disabled = true;
-
-  const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyLZAJYnHN84KHkoXJUSF13esL7Ka4J7pR1QlTNNOBmDf1nesOraDjpvwuffduKv1898g/exec';
-
-  // Usamos FormData en lugar de JSON (compatible con no-cors)
-  const formData = new FormData();
-  formData.append('nombre', nombre);
-  formData.append('asistencia', asistencia);
-  formData.append('menu', menu);
-
-  try {
-    await fetch(SHEET_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      body: formData
-    });
-  } catch(err) {
-    console.error('Error:', err);
-  }
-
-  // Mostrar animación de confirmación
-  document.getElementById('rsvp-form').style.display = 'none';
-  const thanks = document.getElementById('rsvp-thanks');
-  thanks.style.display = 'flex';
-
-  if (asistencia === 'no') {
-    thanks.querySelector('h3').textContent = '¡Te vamos a extrañar!';
-    thanks.querySelector('p').textContent  = 'Gracias por avisarnos. ¡Esperamos verte en la próxima vuelta!';
-    thanks.querySelector('.check').textContent = '✕';
-  }
-}
 </script>
 </body>
 </html>
