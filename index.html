@@ -927,7 +927,7 @@
     btn.textContent = '⏳ ENVIANDO...';
     btn.disabled = true;
     
-    localStorage.setItem('rsvp_enviado', JSON.stringify({ nombre, asistencia }));
+    // localStorage.setItem('rsvp_enviado', JSON.stringify({ nombre, asistencia }));
     
     const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyLZAJYnHN84KHkoXJUSF13esL7Ka4J7pR1QlTNNOBmDf1nesOraDjpvwuffduKv1898g/exec';
 
@@ -966,29 +966,29 @@
   document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
   /* ── BLOQUEAR RSVP SI YA RESPONDIÓ ── */
-  const rsvpObserver = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        const yaRespondio = localStorage.getItem('rsvp_enviado');
-        if (yaRespondio) {
-          const datos = JSON.parse(yaRespondio);
-          document.getElementById('rsvp-form').style.display = 'none';
-          const thanks = document.getElementById('rsvp-thanks');
-          thanks.style.display = 'flex';
-          if (datos.asistencia === 'no') {
-            thanks.querySelector('h3').textContent = '¡Bandera roja! 🚩';
-            thanks.querySelector('p').textContent  = `${datos.nombre}, tu inasistencia ha sido registrada. Nos vas a hacer falta en la pista`;
-            thanks.querySelector('.check').textContent = '✕';
-          } else {
-            thanks.querySelector('h3').textContent = '¡Luz verde, luz verde! 🟢';
-            thanks.querySelector('p').textContent  = `${datos.nombre}, tu asistencia está confirmada. La cuenta regresiva ya empezó y la pista te espera para acelerar a fondo`;
-          }
-        }
-        rsvpObserver.disconnect();
-      }
-    });
-  }, { threshold: 0.3 });
-  rsvpObserver.observe(document.getElementById('rsvp'));
+  // const rsvpObserver = new IntersectionObserver(entries => {
+  //   entries.forEach(e => {
+  //     if (e.isIntersecting) {
+  //       const yaRespondio = localStorage.getItem('rsvp_enviado');
+  //       if (yaRespondio) {
+  //         const datos = JSON.parse(yaRespondio);
+  //         document.getElementById('rsvp-form').style.display = 'none';
+  //         const thanks = document.getElementById('rsvp-thanks');
+  //         thanks.style.display = 'flex';
+  //         if (datos.asistencia === 'no') {
+  //           thanks.querySelector('h3').textContent = '¡Bandera roja! 🚩';
+  //           thanks.querySelector('p').textContent  = `${datos.nombre}, tu inasistencia ha sido registrada. Nos vas a hacer falta en la pista`;
+  //           thanks.querySelector('.check').textContent = '✕';
+  //         } else {
+  //           thanks.querySelector('h3').textContent = '¡Luz verde, luz verde! 🟢';
+  //           thanks.querySelector('p').textContent  = `${datos.nombre}, tu asistencia está confirmada. La cuenta regresiva ya empezó y la pista te espera para acelerar a fondo`;
+  //         }
+  //       }
+  //       rsvpObserver.disconnect();
+  //     }
+  //   });
+  // }, { threshold: 0.3 });
+  // rsvpObserver.observe(document.getElementById('rsvp'));
 </script>
 </body>
 </html>
