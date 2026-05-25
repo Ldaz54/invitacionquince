@@ -640,7 +640,6 @@
     outline: none;
     box-shadow: 3px 3px 0 var(--charcoal);
     transition: transform 0.15s;
-    -webkit-appearance: none;
   }
 
   .rsvp-form input:focus,
@@ -919,7 +918,6 @@
         <span class="info-card-icon">🍾</span>
         <div class="info-card-label">Incluye</div>
         <div class="info-card-value">· Cena<br>· Barra Libre</div>
-        <div class="info-card-sub">Feel free to bring your own drinks</div>
       </div>
     </div>
 
@@ -943,23 +941,25 @@
 
     <div class="gallery-grid fade-in">
       <div class="g-item">
-        <img src="https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=600&q=80" alt="Foto 1" onerror="this.style.display='none'">
+        <img src="./foto1.jpeg" alt="Foto 1" onerror="this.style.display='none'">
       </div>
       <div class="g-item">
-        <img src="https://images.unsplash.com/photo-1504215680853-026ed2a45def?w=600&q=80" alt="Foto 2" onerror="this.style.display='none'">
+        <img src="/foto2.jpeg" alt="Foto 2" onerror="this.style.display='none'">
       </div>
       <div class="g-item">
-        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80" alt="Foto 3" onerror="this.style.display='none'">
+        <img src="/foto3.jpeg" alt="Foto 3" onerror="this.style.display='none'">
       </div>
       <div class="g-item">
-        <img src="https://images.unsplash.com/photo-1507048331197-7d4ac70811cf?w=400&q=80" alt="Foto 4" onerror="this.style.display='none'">
+        <img src="/foto4.jpeg" alt="Foto 4" onerror="this.style.display='none'">
       </div>
       <div class="g-item">
-        <img src="https://images.unsplash.com/photo-1547483238-f400e65ccd56?w=400&q=80" alt="Foto 5" onerror="this.style.display='none'">
+        <img src="/foto5.jpeg" alt="Foto 5" onerror="this.style.display='none'">
       </div>
     </div>
 
     <div class="drive-btn-wrap fade-in">
+  <p style="font-family:'Special Elite',cursive; font-size:16px; color:var(--charcoal); opacity:0.75; margin-bottom:14px; letter-spacing:0.5px;">Deja acá las fotos de esta noche inolvidable</p>
+
       <a href="https://drive.google.com/drive/folders/1mKplArvcAnsW3xHgaA1M9yJ9WeIURuJT?usp=sharing" target="_blank" class="drive-btn">
         ↗ ABRIR GALERÍA DE FOTOS
       </a>
@@ -1075,7 +1075,7 @@
     btn.textContent = '⏳ ENVIANDO...';
     btn.disabled = true;
 
-    // localStorage.setItem('rsvp_enviado', JSON.stringify({ nombre, asistencia }));
+    localStorage.setItem('rsvp_enviado', JSON.stringify({ nombre, asistencia }));
 
     const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyLZAJYnHN84KHkoXJUSF13esL7Ka4J7pR1QlTNNOBmDf1nesOraDjpvwuffduKv1898g/exec';
     const formData = new FormData();
@@ -1100,30 +1100,30 @@
     }
   }
 
-  //  /* ── BLOQUEAR SI YA RESPONDIÓ ── */
-  // const rsvpObserver = new IntersectionObserver(entries => {
-  //   entries.forEach(e => {
-  //     if (e.isIntersecting) {
-  //       const ya = localStorage.getItem('rsvp_enviado');
-  //       if (ya) {
-  //         const d = JSON.parse(ya);
-  //         document.getElementById('rsvp-form').style.display = 'none';
-  //         const t = document.getElementById('rsvp-thanks');
-  //         t.style.display = 'flex';
-  //         if (d.asistencia === 'no') {
-  //           t.querySelector('h3').textContent = '¡TE VAMOS A EXTRAÑAR!';
-  //           t.querySelector('p').textContent  = `${d.nombre}, tu inasistencia fue registrada. Nos vas a hacer falta.`;
-  //           t.querySelector('.check').textContent = '✕';
-  //         } else {
-  //           t.querySelector('h3').textContent = '¡CONFIRMADO!';
-  //           t.querySelector('p').textContent  = `${d.nombre}, tu lugar ya está reservado. ¡Nos vemos el 20!`;
-  //         }
-  //       }
-  //       rsvpObserver.disconnect();
-  //     }
-  //   });
-  // }, { threshold: 0.3 });
-  // rsvpObserver.observe(document.getElementById('rsvp'));
+   /* ── BLOQUEAR SI YA RESPONDIÓ ── */
+  const rsvpObserver = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const ya = localStorage.getItem('rsvp_enviado');
+        if (ya) {
+          const d = JSON.parse(ya);
+          document.getElementById('rsvp-form').style.display = 'none';
+          const t = document.getElementById('rsvp-thanks');
+          t.style.display = 'flex';
+          if (d.asistencia === 'no') {
+            t.querySelector('h3').textContent = '¡TE VAMOS A EXTRAÑAR!';
+            t.querySelector('p').textContent  = `${d.nombre}, tu inasistencia fue registrada. Nos vas a hacer falta.`;
+            t.querySelector('.check').textContent = '✕';
+          } else {
+            t.querySelector('h3').textContent = '¡CONFIRMADO!';
+            t.querySelector('p').textContent  = `${d.nombre}, tu lugar ya está reservado. ¡Nos vemos el 20!`;
+          }
+        }
+        rsvpObserver.disconnect();
+      }
+    });
+  }, { threshold: 0.3 });
+  rsvpObserver.observe(document.getElementById('rsvp'));
 
   /* ── FADE-IN ON SCROLL ── */
   const observer = new IntersectionObserver(entries => {
